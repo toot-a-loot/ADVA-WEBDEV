@@ -47,10 +47,10 @@
             </div>
 
             <div class="buttons">
-                <button type="create" class="create-button">
+                <button type="submit" class="create-button">
                     CREATE ACCOUNT
                 </button>
-                <button type="google" class="google-button">
+                <button type="button" class="google-button">
                     SIGN IN WITH GOOGLE
                 </button>
             </div>
