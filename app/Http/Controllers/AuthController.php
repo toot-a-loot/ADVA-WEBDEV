@@ -28,7 +28,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
@@ -54,7 +54,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'username' => 'required|string|min:3|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -66,7 +66,7 @@ class AuthController extends Controller
         $user = User::create([
             'email' => $request->email,
             'username' => $request->username,
-            'password' => Hash::make($request->password),
+            'password' => $request->password, // <-- NO Hash::make here!
         ]);
 
         Auth::login($user);
