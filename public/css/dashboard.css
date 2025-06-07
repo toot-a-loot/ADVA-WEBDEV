@@ -1,0 +1,170 @@
+body {
+	font-family: Arial, sans-serif;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+}
+
+.container {
+	width: 100%;
+	max-width: 400px;
+	background-color: #ffffff;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	background-color: #b2a0dc;
+	padding-top: 70px;
+	color: white;
+}
+
+.profile {
+	display: flex;
+	align-items: center;
+	padding-bottom: 20px;
+}
+
+.profile img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	margin-right: 10px;
+	margin-left: 20px;
+}
+
+.profile-text {
+	display: flex;
+	flex-direction: column;
+	margin-left: 5px;
+}
+
+.profile-text .name {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.welcome {
+	font-size: 12px;
+	color: #666;
+}
+
+.notification-btn {
+	border: none;
+	padding: 10px;
+	border-radius: 50%;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+/* Status Buttons */
+.status-buttons {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.status-buttons button {
+	flex: 1;
+	margin: 0 5px;
+	padding: 5px;
+	background-color: #C9A0DC;
+	border: none;
+	border-radius: 20px;
+	font-weight: bold;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+/* Task Container */
+.task-container {
+	background-color: #ffffff;
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-radius: 12px;
+	margin-bottom: 20px;
+}
+
+.urgent-btn {
+	background-color: #ff4d4f;
+	color: white;
+	padding: 5px 10px;
+	border: none;
+	border-radius: 5px;
+	font-size: 12px;
+	margin-bottom: 10px;
+}
+
+.task-title {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.task-desc {
+	font-size: 14px;
+	color: #666;
+	margin-bottom: 10px;
+}
+
+.task-action {
+	text-align: right;
+}
+
+.task-action button {
+	background-color: #28a745;
+	color: white;
+	padding: 8px 12px;
+	border: none;
+	border-radius: 6px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+/* Overview Section */
+.overview-container {
+	padding: 15px;
+	background-color: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 12px;
+}
+
+.overview-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.overview-header h3 {
+	font-size: 16px;
+}
+
+.overview-header button {
+	font-size: 12px;
+	padding: 6px 10px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.overview-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 10px;
+}
+
+.overview-box {
+	background-color: #f9f9f9;
+	padding: 12px;
+	border-radius: 8px;
+	text-align: center;
+	font-size: 14px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
