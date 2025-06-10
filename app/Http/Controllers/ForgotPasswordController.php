@@ -11,14 +11,6 @@ use Illuminate\Auth\Events\PasswordReset;
 class ForgotPasswordController extends Controller
 {
     /**
-     * Show the form to request a password reset link
-     */
-    public function showLinkRequestForm()
-    {
-        return view('password.email');
-    }
-
-    /**
      * Send a reset link to the given user
      */
     public function sendResetLinkEmail(Request $request)
@@ -30,8 +22,8 @@ class ForgotPasswordController extends Controller
         );
 
         return $status === Password::RESET_LINK_SENT
-                    ? back()->with(['status' => __($status)])
-                    : back()->withErrors(['email' => __($status)]);
+            ? back()->with(['status' => 'Password reset link sent to your email!'])
+            : back()->withErrors(['email' => 'We could not find a user with that email address.']);
     }
 
     /**
@@ -69,7 +61,7 @@ class ForgotPasswordController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
-                    : back()->withErrors(['email' => [__($status)]]);
+            ? redirect()->route('login')->with('status', 'Password has been reset successfully!')
+            : back()->withErrors(['email' => [__($status)]]);
     }
 }
