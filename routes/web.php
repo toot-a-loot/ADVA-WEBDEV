@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
     return view('login');
@@ -37,3 +38,11 @@ Route::get('/dashboard', function () {
 
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+
+// ...for update delete code testing...in TaskController.php
+Route::resource('tasks', TaskController::class);
+Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+Route::put('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
+Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');

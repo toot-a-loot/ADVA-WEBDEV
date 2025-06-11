@@ -18,7 +18,7 @@
                     <div class="welcome">Welcome!</div>
                 </div>
             </div>
-            <form method="POST" action="{{ route('dashboard') }}">
+            <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="notification-btn">🔔 Logout</button>
             </form>
@@ -31,15 +31,33 @@
             <button>Completed</button>
         </div>
 
-        <!-- Task Card -->
+
+        <!-- Task Cards (Dynamic) -->
+@if(isset($tasks) && count($tasks) > 0)
+    @foreach($tasks as $task)
         <div class="task-container">
-            <button class="urgent-btn">URGENT</button>
-            <div class="task-title">Due Today: Submit Report</div>
-            <div class="task-desc">You need to finalize and submit the quarterly report by 3 PM today.</div>
+            @if(isset($task->is_urgent) && $task->is_urgent)
+                <button class="urgent-btn">URGENT</button>
+            @endif
+            <div class="task-title">{{ $task->title }}</div>
+            <div class="task-desc">{{ $task->description }}</div>
             <div class="task-action">
-                <button>View</button>
+                <!-- View Button (link to a show page if you have one) -->
+                <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-info">View</a>
+                <!-- Edit Button -->
+                <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-primary">Edit</a>
+                <!-- Delete Button -->
+                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
             </div>
         </div>
+    @endforeach
+@else
+    <div>No tasks found.</div>
+@endif
 
         <!-- Task Overview -->
         <div class="overview-container">
