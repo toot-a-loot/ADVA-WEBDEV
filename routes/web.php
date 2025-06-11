@@ -30,3 +30,12 @@ Route::get('/dashboard', function () {
 
 // Also add logout route
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/board', function () {
+    return view('board');
+});
+
+Route::get('/profile/edit', function () {
+    // Return a view or controller for editing the profile
+    return view('profile-edit');
+})->name('profile.edit');
