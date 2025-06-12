@@ -38,3 +38,32 @@ Route::get('/calendar', function () {
 
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// ...for update delete code testing...in TaskController.php
+Route::resource('tasks', TaskController::class);
+Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+Route::put('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
+Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+
+Route::get('/board', function () {
+    return view('board');
+});
+
+Route::get('/profile/edit', function () {
+    // Return a view or controller for editing the profile
+    return view('profile-edit');
+})->name('profile.edit');
+
+// add task for desktop
+Route::get('/task', function () {
+    return view('temporary');
+});
+
+// para ni for spawning components
+Route::get('/spawn/{type}', function ($type) {
+    if (in_array($type, ['task', 'column', 'image'])) {
+        return view('components.' . $type);
+    }
+    abort(404);
+});
