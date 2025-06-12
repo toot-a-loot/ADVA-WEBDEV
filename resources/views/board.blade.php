@@ -18,19 +18,19 @@
         <button class="delete-all-btn" id="deleteAllBtn">Delete All</button>
     </div>
 
-    <div id="settingsModal" class="modal-overlay">
-        <div class="modal-bottom-panel">
-            <div class="modal-actions">
-                <button class="modal-action-btn">
-                    <span class="modal-icon">💾</span>
-                    <span class="modal-label">Save</span>
-                </button>
-                <button class="modal-action-btn">
-                    <span class="modal-icon">❓</span>
-                    <span class="modal-label">Help</span>
-                </button>
-            </div>
+   <div id="settingsModal" class="modal-overlay">
+    <div class="modal-bottom-panel">
+        <div class="modal-actions">
+            <button class="modal-action-btn" id="saveBoardBtn">
+                <span class="modal-icon">💾</span>
+                <span class="modal-label">Save</span>
+            </button>
+            <button class="modal-action-btn">
+                <span class="modal-icon">❓</span>
+                <span class="modal-label">Help</span>
+            </button>
         </div>
+    </div>
     </div>
 
     <div id="addPanelModal" class="modal-overlay">
@@ -55,5 +55,6 @@
 
     <div id="dragDeleteZone" class="drag-delete-zone">Drop here to delete</div>
     <script src="{{ asset('board.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
