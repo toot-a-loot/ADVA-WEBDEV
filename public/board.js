@@ -5,9 +5,144 @@ class WhiteboardApp {
             this.gridPadding = 40;
             this.activeEventListeners = new Map();
             
+
+            this.supabaseUrl = 'https://your-project.supabase.co';
+            this.supabaseKey = 'your-anon-key';
+            this.supabase = supabase.createClient(this.supabaseUrl, this.supabaseKey);
+
             this.cacheElements();
             this.initEventListeners();
+            
         }
+
+        async saveBoardToSupabase(boardName) {
+    try {
+        // Serialize the board state
+        const boardData = this.serializeBoard();
+        
+        // Save to Supabase
+        const { data, error } = await this.supabase
+            .from('boards') // your table name
+            .upsert([
+                { 
+                    name: boardName,
+                    data: boardData,
+                    updated_at: new Date().toISOString()
+                }
+            ]);
+            
+        if (error) throw error;
+        
+        console.log('Board saved successfully!', data);
+        return data;
+    } catch (error) {
+        console.error('Error saving board:', error);
+        return null;
+    }
+}
+
+async loadBoardFromSupabase(boardName) {
+    try {
+        const { data, error } = await this.supabase
+            .from('boards')
+            .select('data')
+            .eq('name', boardName)
+            .single();
+            
+        if (error) throw error;
+        
+        if (data) {
+            this.deserializeBoard(data.data);
+            console.log('Board loaded successfully!');
+        }
+        return data;
+    } catch (error) {
+        console.error('Error loading board:', error);
+        return null;
+    }
+}
+
+serializeBoard() {
+    return {
+        boxes: this.boxes.map(box => ({
+            type: box.type,
+            x: box.element.offsetLeft,
+            y: box.element.offsetTop,
+            width: box.width,
+            height: box.height,
+            status: box.statusLabel?.getAttribute('data-status') || 'in-progress',
+            content: this.getBoxContent(box)
+        }))
+    };
+}
+
+getBoxContent(box) {
+    switch(box.type) {
+        case 'task':
+            return {
+                subject: box.subjectInput.value,
+                body: box.bodyTextarea.value
+            };
+        case 'column':
+            return {
+                title: box.columnTitle.value,
+                items: Array.from(box.columnItems.children).map(item => 
+                    item.querySelector('input').value)
+            };
+        case 'image':
+            return {
+                imageSrc: box.imagePreview.src || ''
+            };
+        default:
+            return {};
+    }
+}
+
+deserializeBoard(data) {
+    // Clear existing boxes
+    this.deleteAllBoxes();
+    
+    // Recreate boxes from saved data
+    data.boxes.forEach(boxData => {
+        const box = this.createNewBox(boxData.status || 'in-progress', boxData.type);
+        
+        // Set position and size
+        box.element.style.left = `${boxData.x}px`;
+        box.element.style.top = `${boxData.y}px`;
+        box.element.style.width = `${boxData.width}px`;
+        box.element.style.height = `${boxData.height}px`;
+        box.width = boxData.width;
+        box.height = boxData.height;
+        
+        // Set content based on type
+        switch(box.type) {
+            case 'task':
+                box.subjectInput.value = boxData.content.subject || '';
+                box.bodyTextarea.value = boxData.content.body || '';
+                break;
+            case 'column':
+                box.columnTitle.value = boxData.content.title || 'Column Title';
+                box.columnItems.innerHTML = '';
+                (boxData.content.items || []).forEach(itemText => {
+                    const addItem = box.element.querySelector('.box-add-item-btn');
+                    addItem.click(); // Add new item
+                    const items = box.columnItems.children;
+                    if (items.length > 0) {
+                        items[items.length - 1].querySelector('input').value = itemText;
+                    }
+                });
+                break;
+            case 'image':
+                if (boxData.content.imageSrc) {
+                    box.imagePreview.src = boxData.content.imageSrc;
+                    box.imagePreview.style.display = '';
+                    box.element.querySelector('.box-image-remove-btn').style.display = '';
+                    box.imageDropzone.style.display = 'none';
+                }
+                break;
+        }
+    });
+}
 
         cacheElements() {
             this.elements = {
@@ -23,6 +158,18 @@ class WhiteboardApp {
         }
 
         initEventListeners() {
+
+            this.addManagedListener(document.getElementById('saveBoardBtn'), 'click', () => {
+        const boardName = prompt('Enter a name for this board:');
+        if (boardName) {
+            this.saveBoardToSupabase(boardName).then(() => {
+                alert('Board saved successfully!');
+             }).catch(error => {
+                console.error('Error saving board:', error);
+                alert('Failed to save board. Please try again.');
+             });
+                    }
+            });
             // Delete all button
             this.addManagedListener(this.elements.deleteAllBtn, 'click', () => this.deleteAllBoxes());
             
@@ -72,7 +219,7 @@ class WhiteboardApp {
         }
 
         handleAddPanelSelection(type) {
-            // Create different box types
+
             if (type === 'column') {
                 this.createNewBox('in-progress', 'column');
             } else if (type === 'image') {
