@@ -1,0 +1,239 @@
+body
+{
+    margin: 0;
+    padding: 0;
+}
+
+.background{
+    position: relative;
+    top: 3.5em;
+    left: 5em;
+    min-width: calc(100vw - 5em);
+    min-height: calc(100vh - 3.5em);
+    background:
+        radial-gradient(circle, #d5d5d5 1px, transparent 1.5px);
+    background-size: 15px 15px;
+    background-position: 0 0;
+    z-index: 0;
+}
+
+.top-panel
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4em;
+    background-color: #B2A0DC;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    z-index: 1;
+}
+
+.back-button
+{
+    position: absolute;
+    top: 0;
+    padding-left: 1vw;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.left-panel
+{
+    position: fixed;
+    top: 4em;
+    left: 0;
+    width: 5em;
+    height: calc(100vh - 3.5em);
+    background-color: #F0EEFF;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1em;
+}
+
+button{
+    border: none;
+    background-color: transparent;
+    padding-top: 2vh;
+}
+
+.left-panel button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    width: 100%;
+    padding: 1em 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.save-button
+{
+    background-color: transparent;
+    cursor: pointer;
+}
+#spawn-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.task-card {
+    position: absolute;
+    cursor: default;
+    background: #fff;
+    border: 1px solid #dedede;
+    margin: 1em 0;
+    box-shadow: 0 2px 8px rgba(178, 160, 220, 0.1);
+    width: 15vw;
+    min-height: 8vh;
+    font-family: Arial, sans-serif;
+}
+
+.task-card .header {
+    cursor: grab;
+    background: #a0dcbd;
+    height: 2vh;
+    user-select: none;
+}
+
+.task-card .header[data-status="ongoing"] {
+    background: #a0dcbd;
+}
+.task-card .header[data-status="urgent"] {
+    background: #dca0a0;
+}
+.task-card .header[data-status="done"] {
+    background: #aaaaaa;
+}
+
+.task-card .status {
+    margin-left: 8px;
+    font-size: 12px;
+}
+
+.task-card .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.task-title {
+    outline: none;
+    flex-grow: 1;
+}
+
+.menu-dots {
+    cursor: pointer;
+    position: relative;
+    padding: 0 8px;
+}
+
+.status-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border: 1px solid #b2a0dc;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.menu-dots:hover .status-menu {
+    display: block;
+}
+
+.status-option {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.status-option:hover {
+    background: #f0eeff;
+}
+
+.todo-list {
+    padding: 8px;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.add-task {
+    padding: 8px;
+    color: #666;
+    cursor: pointer;
+    border-top: 1px solid #eee;
+}
+
+.add-task:hover {
+    background: #f0eeff;
+}
+
+.resizable-handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: 2px;
+    bottom: 2px;
+    cursor: se-resize;
+    background: url('data:image/svg+xml;utf8,<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="16" x2="16" y2="0" stroke="%23dedede" stroke-width="2"/></svg>') no-repeat center center;
+    opacity: 0.7;
+    z-index: 10;
+}
+
+.task-list {
+    list-style-type: disc;
+    margin: 0;
+    padding: 8px 8px 8px 25px;
+}
+
+.task-list li {
+    padding: 4px 0;
+}
+
+.task-list li[contenteditable="true"]:focus {
+    outline: none;
+}
+
+.task-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 4px 0;
+    width: 100%;
+}
+
+.task-list-item span[contenteditable="true"] {
+    flex-grow: 1;
+    margin-right: 8px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    min-width: 0;
+}
+
+.remove-task-item {
+    flex-shrink: 0;
+    color: #999;
+    cursor: pointer;
+    padding: 0 4px;
+    font-weight: bold;
+}
+
+.remove-task-item:hover {
+    color: #ff4444;
+}
