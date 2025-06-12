@@ -56,14 +56,19 @@ Route::get('/profile/edit', function () {
 })->name('profile.edit');
 
 // add task for desktop
-Route::get('/task', function () {
-    return view('edit-task');
-});
+Route::middleware(['auth'])->group(function () {
+    Route::get('/task', function () {
+        return view('edit-task');
+    });
 
-// para ni for spawning components
-Route::get('/spawn/{type}', function ($type) {
-    if (in_array($type, ['task', 'column', 'image'])) {
-        return view('components.' . $type);
-    }
-    abort(404);
+    // para ni for spawning components
+    Route::get('/spawn/{type}', function ($type) {
+        if (in_array($type, ['task', 'column', 'image'])) {
+            return view('components.' . $type);
+        }
+        abort(404);
+    });
+
+    Route::post('/tasks/save', [TaskController::class, 'save'])->name('tasks.save');
+    Route::get('/tasks/user', [TaskController::class, 'getUserTasks'])->name('tasks.user');
 });

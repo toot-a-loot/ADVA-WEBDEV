@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link href="{{ asset('css/edit-task.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/edit-task.css') }}" rel="stylesheet">
     <title>Document</title>
 </head>
 <body>
@@ -18,7 +19,7 @@
                 <img src="{{ asset('css/images/task.png') }}" alt="Add Task">
                 Task
             </button>
-            <button class="save">
+            <button class="save-button">
                 <img src="{{ asset('css/images/save.png') }}" alt="Save">
                 Save
             </button>
@@ -218,6 +219,57 @@
     }
     document.querySelector('.back-button').addEventListener('click', function() {
         window.location.href = base + '/dashboard';
+    });
+
+    document.querySelector('.save-button').addEventListener('click', function() {
+    // Collect all tasks
+    const tasks = [];
+    document.querySelectorAll('.task-card').forEach(card => {
+        const taskItems = [];
+        card.querySelectorAll('.task-list-item span[contenteditable="true"]').forEach(item => {
+            if (item.textContent.trim()) {  // Only add non-empty items
+                taskItems.push(item.textContent.trim());
+            }
+        });
+
+        tasks.push({
+            title: card.querySelector('.task-title').textContent.trim(),
+            status: card.querySelector('.header').dataset.status || 'ongoing',
+            items: taskItems,
+            position: {
+                left: card.style.left || '0px',
+                top: card.style.top || '0px',
+                width: card.style.width || '220px',
+                height: card.style.height || '130px'
+            }
+        });
+    });
+
+    console.log('Saving tasks:', tasks); // Debug log
+
+    fetch(base + '/tasks/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ tasks: tasks })
+    })
+    .then(async response => {
+        const data = await response.json();
+        console.log('Response:', data); // Debug log
+        if (!response.ok) {
+            throw new Error(data.error || 'Network response was not ok');
+        }
+        return data;
+    })
+    .then(data => {
+        alert('Tasks saved successfully!');
+    })
+    .catch(error => {
+        console.error('Error details:', error);
+        alert('Error saving tasks: ' + error.message);
+    });
     });
     </script>
 </body>
