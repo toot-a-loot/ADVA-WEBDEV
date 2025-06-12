@@ -12,6 +12,10 @@
             </div>
         </div>
     </div>
+    <!-- Add due date input -->
+    <div class="due-date-container">
+        <input type="datetime-local" class="due-date-input">
+    </div>
     <div class="content">
         <ul class="task-list"></ul>
     </div>

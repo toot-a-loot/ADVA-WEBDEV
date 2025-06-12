@@ -48,17 +48,17 @@ class TaskController extends Controller
                 throw new \Exception('User not authenticated');
             }
 
-            // Generate a UUID for the user if not exists
             $userId = Str::uuid();
             $tasks = $request->input('tasks');
 
             foreach ($tasks as $task) {
                 $taskData = [
-                    'id' => Str::uuid(), // Generate UUID for each task
+                    'id' => Str::uuid(),
                     'user_id' => $userId,
                     'title' => $task['title'],
                     'status' => $task['status'],
                     'content' => json_encode($task['items']),
+                    'due_date' => $task['dueDate'] ?? null,  // Add this line
                     'position' => json_encode([
                         'x' => str_replace('px', '', $task['position']['left']),
                         'y' => str_replace('px', '', $task['position']['top']),
