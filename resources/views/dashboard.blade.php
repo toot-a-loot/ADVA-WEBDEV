@@ -13,25 +13,55 @@
             <div id="account">
                 <img src="css/images/profile.png" alt="profile" id="profile">
                 <h1>Lorem Ipsum Name</h1>
-                <button><img src="css/images/notification-button.png" alt="notification" id="notification-button"></button>
+                <button id="notification-btn"><img src="css/images/notification-button.png" alt="notification" id="notification-button"></button>
+               <!--Notification box-->
+               <div id="notification-dropdown" class="notification-dropdown" style="display:none;">
+    <div class="notification-row">
+        <div class="notification-indicator"></div>
+        <div class="notification-main">
+            <span class="notification-title">Dogs!</span>
+            <span class="notification-desc">buy dog food!</span>
+        </div>
+        <span class="notification-due">Due: June 13</span>
+        <span class="notification-remove">—</span>
+    </div>
+    <div class="notification-row">
+        <div class="notification-indicator"></div>
+        <div class="notification-main">
+            <span class="notification-title">Imong SRS!</span>
+        </div>
+        <span class="notification-due">Due: June 12</span>
+        <span class="notification-remove">—</span>
+    </div>
+    <div class="notification-row">
+        <div class="notification-indicator"></div>
+        <div class="notification-main">
+            <span class="notification-title">Dogs!</span>
+            <span class="notification-desc">buy dog food!</span>
+        </div>
+        <span class="notification-due">Due: June 13</span>
+        <span class="notification-remove">—</span>
+    </div>
+</div>
+                <!--notification box-->
             </div>
-            <div id="categories">
-                <h6>Your Categories</h6>
-                    <button id="category">
-                        <div class="bullet"></div>
-                        <p>Work</p>
-                        <p class="count">42</p>
-                    </button>
-                    <button id="category">
-                        <div class="bullet"></div>
-                        <p>School</p>
-                        <p class="count">42</p>
-                    </button>
-                    <button id="category">
-                        <div class="bullet"></div>
-                        <p>Home</p>
-                        <p class="count">42</p>
-                    </button>
+                <div id="categories">
+                    <h6>Your Categories</h6>
+                        <button id="category">
+                            <div class="bullet"></div>
+                            <p>Work</p>
+                            <p class="count">42</p>
+                        </button>
+                        <button id="category">
+                            <div class="bullet"></div>
+                            <p>School</p>
+                            <p class="count">42</p>
+                        </button>
+                        <button id="category">
+                            <div class="bullet"></div>
+                            <p>Home</p>
+                            <p class="count">42</p>
+                        </button>
             </div>
             <div id="filters">
                 <h6>Filter</h6>
@@ -92,5 +122,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+    document.getElementById('notification-btn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const dropdown = document.getElementById('notification-dropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('notification-dropdown');
+        const btn = document.getElementById('notification-btn');
+        if (!dropdown.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>
