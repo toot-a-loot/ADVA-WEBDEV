@@ -89,67 +89,77 @@
                         class="calendar-button"></a>
             </div>
             <div class="Urgent-tasks">
-    <h1>Urgent</h1>
-    <div id="urgent-tasks-list"></div>
-</div>
+                <h1>Urgent</h1>
+                <div id="urgent-tasks-list"></div>
+            </div>
 
-<div class="RecentlyAdded-tasks">
-    <h1>Recently added</h1>
-    <div id="recent-tasks-list"></div>
-</div>
+            <div class="RecentlyAdded-tasks">
+                <h1>Recently added</h1>
+                <div id="recent-tasks-list"></div>
+            </div>
         </div>
     </div>
+    <!-- Logout Modal -->
+    <div class="modal-overlay" id="logoutModalOverlay"></div>
+    <div class="logout-modal" id="logoutModal">
+        <h2>Are you sure you want to logout?</h2>
+        <div class="modal-buttons">
+            <button class="cancel-btn" onclick="closeLogoutModal()">Cancel</button>
+            <button class="logout-confirm-btn" onclick="confirmLogout()">Logout</button>
+        </div>
+    </div>
+
     <script>
-document.getElementById('notification-btn').onclick = function(e) {
-    e.stopPropagation();
-    var dropdown = document.getElementById('notification-dropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-};
-document.addEventListener('click', function() {
-    var dropdown = document.getElementById('notification-dropdown');
-    if(dropdown) dropdown.style.display = 'none';
-});
+        document.getElementById('notification-btn').onclick = function (e) {
+            e.stopPropagation();
+            var dropdown = document.getElementById('notification-dropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        };
+        document.addEventListener('click', function () {
+            var dropdown = document.getElementById('notification-dropdown');
+            if (dropdown) dropdown.style.display = 'none';
+        });
 
-    document.addEventListener('DOMContentLoaded', () => {
-    fetch('/tasks/fetch')
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error(data.error);
-                return;
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/tasks/fetch')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error(data.error);
+                        return;
+                    }
 
-            const urgentList = document.getElementById('urgent-tasks-list');
-            const recentList = document.getElementById('recent-tasks-list');
+                    const urgentList = document.getElementById('urgent-tasks-list');
+                    const recentList = document.getElementById('recent-tasks-list');
 
-            // Clear current tasks
-            urgentList.innerHTML = '';
-            recentList.innerHTML = '';
+                    // Clear current tasks
+                    urgentList.innerHTML = '';
+                    recentList.innerHTML = '';
 
-            const tasks = Array.isArray(data) ? data : data.tasks || [];
+                    const tasks = Array.isArray(data) ? data : data.tasks || [];
 
-            tasks.forEach(task => {
-                const dueDate = task.due_date ? new Date(task.due_date + 'T00:00:00') : null; // Ensure date parsing is consistent
-                const now = new Date();
-                // Normalize 'now' to match the start of the day for comparison
-                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    tasks.forEach(task => {
+                        const dueDate = task.due_date ? new Date(task.due_date + 'T00:00:00') : null; // Ensure date parsing is consistent
+                        const now = new Date();
+                        // Normalize 'now' to match the start of the day for comparison
+                        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-                let isUrgent = false;
-                if (dueDate) {
-                    const taskDueDateOnly = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
-                    isUrgent = (taskDueDateOnly.getTime() === today.getTime());
-                }
+                        let isUrgent = false;
+                        if (dueDate) {
+                            const taskDueDateOnly = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
+                            isUrgent = (taskDueDateOnly.getTime() === today.getTime());
+                        }
 
-                // If a task is urgent, it should only appear in urgent list.
-                // Otherwise, it can appear in the "Recently added" list.
-                // You might need more sophisticated logic here if "Recently added"
-                // has a specific time-based criteria (e.g., added in the last 7 days).
-                // For now, we'll put all non-urgent tasks in 'Recently added'.
-                const isRecent = !isUrgent; // All tasks that are not urgent
+                        // If a task is urgent, it should only appear in urgent list.
+                        // Otherwise, it can appear in the "Recently added" list.
+                        // You might need more sophisticated logic here if "Recently added"
+                        // has a specific time-based criteria (e.g., added in the last 7 days).
+                        // For now, we'll put all non-urgent tasks in 'Recently added'.
+                        const isRecent = !isUrgent; // All tasks that are not urgent
 
-                const taskEl = document.createElement('div');
-                taskEl.className = 'task';
-                taskEl.innerHTML = `
+                        const taskEl = document.createElement('div');
+                        taskEl.className = 'task';
+                        taskEl.innerHTML = `
                     <div class="indicator" style="background-color: ${isUrgent ? '#FF6F62' : '#B2A0DC'};"></div>
                     <div class="task-details">
                         <span id="title">${task.title}</span>
@@ -158,15 +168,61 @@ document.addEventListener('click', function() {
                     <div class="task-setting"></div>
                 `;
 
-                if (isUrgent) {
-                    urgentList.appendChild(taskEl);
-                } else { // All other tasks go to "Recently added"
-                    recentList.appendChild(taskEl);
-                }
-            });
-        })
-        .catch(err => console.error('Failed to load tasks:', err));
+                        if (isUrgent) {
+                            urgentList.appendChild(taskEl);
+                        } else { // All other tasks go to "Recently added"
+                            recentList.appendChild(taskEl);
+                        }
+                    });
+                })
+                .catch(err => console.error('Failed to load tasks:', err));
         });
-</script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutButton = document.querySelector('.logout-button');
+            const modalOverlay = document.getElementById('logoutModalOverlay');
+            const logoutModal = document.getElementById('logoutModal');
+
+            function showLogoutModal() {
+                if (modalOverlay && logoutModal) {
+                    modalOverlay.style.display = 'block';
+                    logoutModal.style.display = 'block';
+                } else {
+                    console.error('Logout modal elements not found.');
+                }
+            }
+
+            function closeLogoutModal() {
+                if (modalOverlay && logoutModal) {
+                    modalOverlay.style.display = 'none';
+                    logoutModal.style.display = 'none';
+                }
+            }
+
+            window.closeLogoutModal = closeLogoutModal;
+            window.confirmLogout = function () {
+                window.location.href = "{{ url('/login') }}";
+            };
+
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent form submission or default button behavior
+                    showLogoutModal();
+                });
+            } else {
+                console.error('Logout button not found.');
+            }
+
+            if (modalOverlay) {
+                modalOverlay.addEventListener('click', function (e) {
+                    // Only close if the overlay itself is clicked, not the modal
+                    if (e.target === modalOverlay) {
+                        closeLogoutModal();
+                    }
+                });
+            }
+        });
+    </script>
 </body>
+
 </html>
