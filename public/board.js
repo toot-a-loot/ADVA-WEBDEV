@@ -6,8 +6,8 @@ class WhiteboardApp {
             this.activeEventListeners = new Map();
             
 
-            this.supabaseUrl = 'https://your-project.supabase.co';
-            this.supabaseKey = 'your-anon-key';
+            this.supabaseUrl = 'https://euddfnpylvmebcqfqadh.supabase.co';
+            this.supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1ZGRmbnB5bHZtZWJjcWZxYWRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxNzcwMjMsImV4cCI6MjA2Mzc1MzAyM30.fe7GCpJOqisBu0V-8kTsy162UWv_jxDn709Pns9kWQo';
             this.supabase = supabase.createClient(this.supabaseUrl, this.supabaseKey);
 
             this.cacheElements();
