@@ -62,7 +62,7 @@
         </div>
         <div id="main-panel" class="container">
             <div id="top-bar">
-                <a href="{{ url('/task') }}"><img src="resources/css/images/addTask_button.png" alt="add"></a>
+                <a href="{{ url('/task') }}"><img src="/css/images/addTask_button.png" alt="add"></a>
                 <div id="searchbar">
                     <input type="text" id="search-input" placeholder="Look up your task here!">
                     <button class="search-button"><img src="css/images/search-button.png" alt="search" id="search-button"></button>
