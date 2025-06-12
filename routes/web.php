@@ -30,7 +30,7 @@ Route::get('/forgot-password', function () {
 })->name('forgot.password');
 
 // Send code to email
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode'])->name('password.email');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode'])->name('password.send_code');
 
 // Show code entry form
 Route::get('/enter-code', [ForgotPasswordController::class, 'showCodeForm'])->name('password.code.form');

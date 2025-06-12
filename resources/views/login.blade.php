@@ -415,6 +415,38 @@
             opacity: 0;
             z-index: 1;
         }
+
+        .success {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+            transform: translateX(100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container.success-active .success {
+            transform: translateX(0);
+            opacity: 1;
+            z-index: 5;
+            animation: move 0.6s;
+        }
+
+        .container.success-active .enter-code,
+        .container.success-active .reset-password,
+        .container.success-active .forgot-password,
+        .container.success-active .login,
+        .container.success-active .sign-up {
+            transform: translateX(-100%);
+            opacity: 0;
+            z-index: 1;
+        }
     </style>
 </head>
 
@@ -476,7 +508,7 @@
 
         <div class="form-container forgot-password">
             <div id="back-to-login-arrow" class="back-arrow"></div>
-            <form method="POST" action="{{ route('password.email') }}">
+            <form method="POST" action="{{ route('password.send_code') }}">
                 @csrf
                 <h1>Oh no...</h1>
                 <p>Please provide your email below so we can send you
@@ -674,9 +706,11 @@
         // Function to activate the success container
         function showSuccessMessage() {
             container.classList.remove('code-active');
+            container.classList.remove('reset-active');
+            container.classList.remove('forgot-active');
+            container.classList.remove('active');
             container.classList.add('success-active');
         }
-
 
         // Check for success message and activate the success container
         @if (session('status') == 'Password has been reset!')
