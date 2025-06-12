@@ -35,5 +35,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth')->name('dashboard');
 
+//Calendar
+Route::get('/calendar', function () {
+    return view('calendar'); // loads resources/views/about.blade.php
+});
+
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
