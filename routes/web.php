@@ -57,7 +57,7 @@ Route::get('/profile/edit', function () {
 
 // add task for desktop
 Route::get('/task', function () {
-    return view('temporary');
+    return view('edit-task');
 });
 
 // para ni for spawning components
