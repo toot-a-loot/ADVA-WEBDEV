@@ -62,3 +62,17 @@ Route::get('/profile/edit', function () {
     // Return a view or controller for editing the profile
     return view('profile-edit');
 })->name('profile.edit');
+
+// add task for desktop
+Route::get('/task', function ()
+{
+    return view('temporary');
+});
+
+// para ni for spawning components
+Route::get('/spawn/{type}', function($type) {
+    if (in_array($type, ['task', 'column', 'image'])) {
+        return view('components.' . $type);
+    }
+    abort(404);
+});
