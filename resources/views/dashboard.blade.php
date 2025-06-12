@@ -15,6 +15,40 @@
             <div id="account">
                 <img src="css/images/profile.png" alt="profile" id="profile">
                 <h1>Lorem Ipsum Name</h1>
+            
+                <button id="notification-btn" style="background:none;border:none;cursor:pointer;">
+                    <img src="css/images/notification-button.png" alt="notification" id="notification-button">
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notification-dropdown" class="notification-dropdown"
+                    style="display:none; position:absolute; top:55px; right:10px; z-index:1000;">
+                    <div class="notification-row">
+                        <div class="notification-indicator"></div>
+                        <div class="notification-main">
+                            <span class="notification-title">Dogs!</span>
+                            <span class="notification-desc">buy dog food!</span>
+                        </div>
+                        <span class="notification-due">Due: June 13</span>
+                        <span class="notification-remove">—</span>
+                    </div>
+                    <div class="notification-row">
+                        <div class="notification-indicator"></div>
+                        <div class="notification-main">
+                            <span class="notification-title">Imong SRS!</span>
+                        </div>
+                        <span class="notification-due">Due: June 12</span>
+                        <span class="notification-remove">—</span>
+                    </div>
+                    <div class="notification-row">
+                        <div class="notification-indicator"></div>
+                        <div class="notification-main">
+                            <span class="notification-title">Dogs!</span>
+                            <span class="notification-desc">buy dog food!</span>
+                        </div>
+                        <span class="notification-due">Due: June 13</span>
+                        <span class="notification-remove">—</span>
+                    </div>
+                </div>
             </div>
             <div id="filters">
                 <h6>Filter</h6>
@@ -78,6 +112,17 @@
             </div>
         </div>
     </div>
+    <script>
+document.getElementById('notification-btn').onclick = function(e) {
+    e.stopPropagation();
+    var dropdown = document.getElementById('notification-dropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+};
+document.addEventListener('click', function() {
+    var dropdown = document.getElementById('notification-dropdown');
+    if(dropdown) dropdown.style.display = 'none';
+});
+</script>
 </body>
 
 </html>
