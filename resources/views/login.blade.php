@@ -7,7 +7,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap">
     <style>
-        /* Your existing styles here (as provided before) */
+        /* Add these new styles before your existing styles */
+        .mobile-login-container {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+        }
+
+        .mobile-login-container h1 {
+            color: #B2A0DC;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .mobile-login-container .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .mobile-login-container label {
+            display: block;
+            color: #B2A0DC;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .mobile-login-container input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f8f8f8;
+        }
+
+        .mobile-login-container .password-input-container {
+            position: relative;
+        }
+
+        .mobile-login-container .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #B2A0DC;
+        }
+
+        .mobile-login-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #B2A0DC;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .mobile-login-container .links {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .mobile-login-container .links a {
+            color: #B2A0DC;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin: 0.5rem 0;
+        }
+
+        .mobile-login-container .error-message {
+            background-color: #fee2e2;
+            color: #dc2626;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .mobile-login-container .error-text {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 0.25rem;
+        }
+
+        /* Single media query for mobile devices */
+        @media screen and (max-width: 800px) {
+            .container {
+                display: none;
+            }
+
+            .mobile-login-container {
+                display: block;
+            }
+        }
+
+        /* Your existing styles continue below */
         * {
             margin: 0;
             padding: 0;
@@ -17,12 +121,13 @@
 
         body {
             background-color: #FFF;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+            min-height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
         .container {
@@ -31,9 +136,99 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
             position: relative;
             overflow: hidden;
-            width: 70%;
-            max-width: 100%;
-            min-height: 70%;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            .container {
+                min-height: 500px;
+            }
+
+            .form-container {
+                width: 100% !important;
+                padding: 0 20px !important;
+            }
+
+            .form-container h1 {
+                font-size: 2rem !important;
+            }
+
+            .toggle-container {
+                display: none;
+            }
+
+            .container.active .login,
+            .container.active .sign-up,
+            .container.forgot-active .login,
+            .container.forgot-active .forgot-password,
+            .container.code-active .login,
+            .container.code-active .enter-code,
+            .container.reset-active .login,
+            .container.reset-active .reset-password,
+            .container.success-active .login,
+            .container.success-active .success {
+                transform: translateX(0) !important;
+                opacity: 1 !important;
+                z-index: 5 !important;
+            }
+
+            .container.active .sign-up,
+            .container.forgot-active .forgot-password,
+            .container.code-active .enter-code,
+            .container.reset-active .reset-password,
+            .container.success-active .success {
+                transform: translateX(100%) !important;
+            }
+
+            .container input {
+                font-size: 14px;
+                padding: 12px 15px;
+            }
+
+            .container button {
+                width: 100%;
+                padding: 12px 45px;
+                font-size: 14px;
+            }
+
+            .back-arrow {
+                top: 15px;
+                left: 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                border-radius: 20px;
+                min-height: 450px;
+            }
+
+            .form-container h1 {
+                font-size: 1.75rem !important;
+            }
+
+            .container p {
+                font-size: 13px;
+            }
+
+            .container input {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+
+            .container button {
+                padding: 10px 35px;
+                font-size: 13px;
+            }
+
+            .error-message,
+            .success-message {
+                font-size: 12px;
+                padding: 8px;
+            }
         }
 
         .container p {
@@ -368,6 +563,13 @@
             opacity: 0;
             z-index: 1;
             transform: translateX(100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .container.success-active .success {
@@ -415,42 +617,179 @@
             opacity: 0;
             z-index: 1;
         }
-
-        .success {
-            left: 0;
-            width: 50%;
-            opacity: 0;
-            z-index: 1;
-            transform: translateX(100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .container.success-active .success {
-            transform: translateX(0);
-            opacity: 1;
-            z-index: 5;
-            animation: move 0.6s;
-        }
-
-        .container.success-active .enter-code,
-        .container.success-active .reset-password,
-        .container.success-active .forgot-password,
-        .container.success-active .login,
-        .container.success-active .sign-up {
-            transform: translateX(-100%);
-            opacity: 0;
-            z-index: 1;
-        }
     </style>
 </head>
 
 <body>
+    <!-- Simplified Mobile Login Form -->
+    <div class="mobile-login-container">
+        <h1>Login</h1>
+        @if(session('error'))
+            <div class="error-message">
+                {{ session('error') }}
+            </div>
+        @endif
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="form-group">
+                <label for="mobile_login_email">Email</label>
+                <input id="mobile_login_email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+                @error('email')
+                    <span class="error-text">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="mobile_login_password">Password</label>
+                <div class="password-input-container">
+                    <input id="mobile_login_password" type="password" name="password" required>
+                    <span class="password-toggle" onclick="toggleMobilePassword('mobile_login_password')">👁️</span>
+                </div>
+                @error('password')
+                    <span class="error-text">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <button type="submit">Login</button>
+
+            <div class="links">
+                <a href="#" onclick="showMobileForgotPassword()">Forgot Password?</a>
+                <a href="#" onclick="showMobileSignup()">Create Account</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Mobile Forgot Password Form -->
+    <div class="mobile-login-container" id="mobile-forgot-password" style="display: none;">
+        <h1>Reset Password</h1>
+        <form method="POST" action="{{ route('password.send_code') }}">
+            @csrf
+            <div class="form-group">
+                <label for="mobile_forgot_email">Email</label>
+                <input id="mobile_forgot_email" type="email" name="email" value="{{ old('email') }}" required>
+                @error('email')
+                    <span class="error-text">{{ $message }}</span>
+                @enderror
+            </div>
+            <button type="submit">Send Reset Code</button>
+            <div class="links">
+                <a href="#" onclick="showMobileLogin()">Back to Login</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Mobile Signup Form -->
+    <div class="mobile-login-container" id="mobile-signup" style="display: none;">
+        <h1>Create Account</h1>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+            <div class="form-group">
+                <label for="mobile_username">Username</label>
+                <input id="mobile_username" type="text" name="username" required>
+                @error('username')
+                    <span class="error-text">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="mobile_email">Email</label>
+                <input id="mobile_email" type="email" name="email" required>
+                @error('email')
+                    <span class="error-text">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="mobile_password">Password</label>
+                <div class="password-input-container">
+                    <input id="mobile_password" type="password" name="password" required>
+                    <span class="password-toggle" onclick="toggleMobilePassword('mobile_password')">👁️</span>
+                </div>
+                @error('password')
+                    <span class="error-text">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="mobile_password_confirmation">Confirm Password</label>
+                <div class="password-input-container">
+                    <input id="mobile_password_confirmation" type="password" name="password_confirmation" required>
+                    <span class="password-toggle"
+                        onclick="toggleMobilePassword('mobile_password_confirmation')">👁️</span>
+                </div>
+            </div>
+
+            <button type="submit">Sign Up</button>
+            <div class="links">
+                <a href="#" onclick="showMobileLogin()">Back to Login</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Mobile Code Verification Form -->
+    <div class="mobile-login-container" id="mobile-code-verification" style="display: none;">
+        <h1>Enter Code</h1>
+        <form method="POST" action="{{ route('password.verify_code') }}" id="mobile-reset-password-form">
+            @csrf
+            <div class="form-group">
+                <label for="mobile_code">Verification Code</label>
+                <input type="text" name="code" id="mobile_code" placeholder="Enter code" required>
+                @error('code')
+                    <span class="error-text">{{ $message }}</span>
+                @enderror
+            </div>
+            <input type="hidden" name="email" value="{{ session('email') }}">
+            <button type="submit">Verify Code</button>
+            <div class="links">
+                <a href="#" onclick="showMobileForgotPassword()">Back</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Mobile Reset Password Form -->
+    <div class="mobile-login-container" id="mobile-reset-password" style="display: none;">
+        <h1>New Password</h1>
+        <form method="POST" action="{{ route('password.reset') }}" id="mobile-password-reset-form">
+            @csrf
+            <input type="hidden" name="email" value="{{ session('email') }}">
+            <div class="form-group">
+                <label for="mobile_new_password">New Password</label>
+                <div class="password-input-container">
+                    <input type="password" name="password" id="mobile_new_password" required minlength="8">
+                    <span class="password-toggle" onclick="toggleMobilePassword('mobile_new_password')">👁️</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="mobile_confirm_password">Confirm Password</label>
+                <div class="password-input-container">
+                    <input type="password" name="password_confirmation" id="mobile_confirm_password" required
+                        minlength="8">
+                    <span class="password-toggle" onclick="toggleMobilePassword('mobile_confirm_password')">👁️</span>
+                </div>
+            </div>
+            <div class="error-text" id="mobile-password-match-error" style="display: none;">
+                Passwords do not match!
+            </div>
+            <button type="submit" id="mobile-reset-submit-btn">Update Password</button>
+            <div class="links">
+                <a href="#" onclick="showMobileCodeVerification()">Back</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Mobile Success Message -->
+    <div class="mobile-login-container" id="mobile-success" style="display: none;">
+        <h1>Success!</h1>
+        <div class="success-message">
+            Your password has been successfully reset.
+        </div>
+        <div class="links">
+            <a href="{{ route('login') }}">
+                <button>Back to Login</button>
+            </a>
+        </div>
+    </div>
+
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form method="POST" action="{{ route('register') }}">
@@ -611,48 +950,62 @@
         const backToLoginArrow = document.getElementById('back-to-login-arrow');
         const backToLoginArrowCode = document.getElementById('back-to-login-arrow-code');
         const backToCodeArrow = document.getElementById('back-to-code-arrow');
+
+        // Function to handle form transitions
+        function handleFormTransition(showForm, hideForms) {
+            // Remove all active classes first
+            container.classList.remove('active', 'forgot-active', 'code-active', 'reset-active', 'success-active');
+
+            // Add the active class for the form to show
+            if (showForm) {
+                container.classList.add(showForm);
+            }
+
+            // Hide other forms if specified
+            if (hideForms && Array.isArray(hideForms)) {
+                hideForms.forEach(form => {
+                    container.classList.remove(form);
+                });
+            }
+        }
+
         // When code is verified, show reset password container
         @if (session('reset_active'))
-            container.classList.add('reset-active');
+            handleFormTransition('reset-active');
         @endif
 
         // Back arrow from reset password to code entry
         backToCodeArrow?.addEventListener('click', (e) => {
             e.preventDefault();
-            container.classList.remove("reset-active");
-            container.classList.add("code-active");
+            handleFormTransition('code-active', ['reset-active']);
         });
 
-        registerBtn.addEventListener('click', () => {
-            container.classList.add("active");
+        registerBtn?.addEventListener('click', () => {
+            handleFormTransition('active');
         });
 
-        loginBtn.addEventListener('click', () => {
-            container.classList.remove("active");
-            container.classList.remove("forgot-active");
-            container.classList.remove("code-active");
-            container.classList.remove("success-active");
+        loginBtn?.addEventListener('click', () => {
+            handleFormTransition(null, ['active', 'forgot-active', 'code-active', 'success-active']);
         });
 
-        forgotPasswordLink.addEventListener('click', (e) => {
+        forgotPasswordLink?.addEventListener('click', (e) => {
             e.preventDefault();
-            container.classList.add("forgot-active");
+            handleFormTransition('forgot-active');
         });
 
-        backToLoginArrow.addEventListener('click', (e) => {
+        backToLoginArrow?.addEventListener('click', (e) => {
             e.preventDefault();
-            container.classList.remove("forgot-active");
+            handleFormTransition(null, ['forgot-active']);
         });
 
-        backToLoginArrowCode.addEventListener('click', (e) => {
+        backToLoginArrowCode?.addEventListener('click', (e) => {
             e.preventDefault();
-            container.classList.remove("code-active");
-            container.classList.add("forgot-active");
+            handleFormTransition('forgot-active', ['code-active']);
         });
 
         // Check for code_active session and activate the code form
         @if (session('code_active'))
-            container.classList.add('code-active');
+            handleFormTransition('code-active');
         @endif
 
             // Password visibility toggle function
@@ -676,7 +1029,7 @@
         const resetSubmitBtnReset = document.getElementById('reset-submit-btn-reset');
 
         function validatePasswordsReset() {
-            if (newPasswordReset.value && confirmPasswordReset.value) {
+            if (newPasswordReset && confirmPasswordReset && newPasswordReset.value && confirmPasswordReset.value) {
                 if (newPasswordReset.value !== confirmPasswordReset.value) {
                     passwordMatchErrorReset.style.display = 'block';
                     resetSubmitBtnReset.disabled = true;
@@ -696,7 +1049,7 @@
             newPasswordReset.addEventListener('input', validatePasswordsReset);
             confirmPasswordReset.addEventListener('input', validatePasswordsReset);
 
-            document.getElementById('password-reset-form').addEventListener('submit', function (e) {
+            document.getElementById('password-reset-form')?.addEventListener('submit', function (e) {
                 if (!validatePasswordsReset()) {
                     e.preventDefault();
                 }
@@ -705,16 +1058,118 @@
 
         // Function to activate the success container
         function showSuccessMessage() {
-            container.classList.remove('code-active');
-            container.classList.remove('reset-active');
-            container.classList.remove('forgot-active');
-            container.classList.remove('active');
-            container.classList.add('success-active');
+            handleFormTransition('success-active');
         }
 
         // Check for success message and activate the success container
         @if (session('status') == 'Password has been reset!')
             showSuccessMessage();
+        @endif
+
+            // Mobile form functions
+            function showMobileLogin() {
+                hideAllMobileForms();
+                document.querySelector('.mobile-login-container').style.display = 'block';
+            }
+
+        function showMobileForgotPassword() {
+            hideAllMobileForms();
+            document.getElementById('mobile-forgot-password').style.display = 'block';
+        }
+
+        function showMobileSignup() {
+            hideAllMobileForms();
+            document.getElementById('mobile-signup').style.display = 'block';
+        }
+
+        function showMobileCodeVerification() {
+            hideAllMobileForms();
+            document.getElementById('mobile-code-verification').style.display = 'block';
+        }
+
+        function showMobileResetPassword() {
+            hideAllMobileForms();
+            document.getElementById('mobile-reset-password').style.display = 'block';
+        }
+
+        function showMobileSuccess() {
+            hideAllMobileForms();
+            document.getElementById('mobile-success').style.display = 'block';
+        }
+
+        function hideAllMobileForms() {
+            const mobileForms = document.querySelectorAll('.mobile-login-container');
+            mobileForms.forEach(form => {
+                form.style.display = 'none';
+            });
+        }
+
+        // Handle window resize
+        let resizeTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                if (window.innerWidth > 800) {
+                    hideAllMobileForms();
+                    document.getElementById('container').style.display = 'block';
+                } else {
+                    document.getElementById('container').style.display = 'none';
+                    showMobileLogin();
+                }
+            }, 250);
+        });
+
+        // Password matching validation for mobile reset form
+        const mobileNewPassword = document.getElementById('mobile_new_password');
+        const mobileConfirmPassword = document.getElementById('mobile_confirm_password');
+        const mobilePasswordMatchError = document.getElementById('mobile-password-match-error');
+        const mobileResetSubmitBtn = document.getElementById('mobile-reset-submit-btn');
+
+        function validateMobilePasswords() {
+            if (mobileNewPassword && mobileConfirmPassword && mobileNewPassword.value && mobileConfirmPassword.value) {
+                if (mobileNewPassword.value !== mobileConfirmPassword.value) {
+                    mobilePasswordMatchError.style.display = 'block';
+                    mobileResetSubmitBtn.disabled = true;
+                    mobileResetSubmitBtn.style.opacity = '0.5';
+                    return false;
+                } else {
+                    mobilePasswordMatchError.style.display = 'none';
+                    mobileResetSubmitBtn.disabled = false;
+                    mobileResetSubmitBtn.style.opacity = '1';
+                    return true;
+                }
+            }
+            return true;
+        }
+
+        if (mobileNewPassword && mobileConfirmPassword) {
+            mobileNewPassword.addEventListener('input', validateMobilePasswords);
+            mobileConfirmPassword.addEventListener('input', validateMobilePasswords);
+
+            document.getElementById('mobile-password-reset-form')?.addEventListener('submit', function (e) {
+                if (!validateMobilePasswords()) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Show appropriate form based on session state
+        @if (session('code_active'))
+            if (window.innerWidth <= 800) {
+                showMobileCodeVerification();
+            }
+        @endif
+
+        @if (session('reset_active'))
+            if (window.innerWidth <= 800) {
+                showMobileResetPassword();
+            }
+        @endif
+
+        @if (session('status') == 'Password has been reset!')
+            if (window.innerWidth <= 800) {
+                showMobileSuccess();
+            }
         @endif
     </script>
 </body>
