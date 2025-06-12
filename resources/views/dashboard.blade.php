@@ -56,28 +56,34 @@
                         <p class="count">42</p>
                     </button>
             </div>
-            <button class="settings-button">
-                <img src="css/images/settings-button.png" alt="settings">
-            </button>
+            <form method="POST" action="{{ route('dashboard') }}">
+                @csrf
+                <button type="submit" class="notification-btn">🔔 Logout</button>
+            </form>
         </div>
-        <div id="main-panel" class="container">
-            <div id="top-bar">
-                <div id="searchbar">
-                    <input type="text" id="search-input" placeholder="Look up your task here!">
-                    <button class="search-button"><img src="css/images/search-button.png" alt="search" id="search-button"></button>
-                </div>
-                <button id="calendar-button"><a href="{{ url('/calendar') }}"><img src="css/images/calendar-button.png" alt="calendar" class="calendar-button"></a></button>
+
+        <!-- Status Buttons -->
+        <div class="status-buttons">
+            <button>Urgent</button>
+            <button>In Progress</button>
+            <button>Completed</button>
+        </div>
+
+        <!-- Task Card -->
+        <div class="task-container">
+            <button class="urgent-btn">URGENT</button>
+            <div class="task-title">Due Today: Submit Report</div>
+            <div class="task-desc">You need to finalize and submit the quarterly report by 3 PM today.</div>
+            <div class="task-action">
+                <button>View</button>
             </div>
-            <div class="Urgent-tasks">
-                <h1>Urgent</h1>
-                <button class="task">
-                    <div class="indicator"></div>
-                        <div class="task-details">
-                            <span id="title">Due Today!</span>
-                            <span id="description">Imong SRS!</span>
-                        </div>
-                    <div class="task-setting"></div>
-                </button>
+        </div>
+
+        <!-- Task Overview -->
+        <div class="overview-container">
+            <div class="overview-header">
+                <h3>Task Overview</h3>
+                <button>View All</button>
             </div>
             <div class="RecentlyAdded-tasks">
                 <h1>Recently added</h1>
