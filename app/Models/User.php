@@ -47,7 +47,7 @@ class User extends Authenticatable
      *
      * @var bool
      */
-    public $timestamps = false;
+    // public $timestamps = false;
 
     /**
      * Hash the password before saving.

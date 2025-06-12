@@ -1,170 +1,232 @@
 body {
-	font-family: Arial, sans-serif;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
 }
 
-.container {
-	width: 100%;
-	max-width: 400px;
-	background-color: #ffffff;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+#wrapper {
+    display: flex;
 }
 
-.header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
-	background-color: #b2a0dc;
-	padding-top: 70px;
-	color: white;
+#side-panel {
+    width: 20%;
+    height: 100vh;
+    background-color: #B2A0DC;
+    color: white;
 }
 
-.profile {
-	display: flex;
-	align-items: center;
-	padding-bottom: 20px;
+#account {
+    margin-top: 20px;
+    display: flex;
 }
 
-.profile img {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	margin-right: 10px;
-	margin-left: 20px;
+#profile {
+    width: 40px;
+    height: 40px;
+    padding-left: 20px;
 }
 
-.profile-text {
-	display: flex;
-	flex-direction: column;
-	margin-left: 5px;
+#account h1 {
+    font-size: 14px;
+    padding: 0px 10px;
 }
 
-.profile-text .name {
-	font-weight: bold;
-	font-size: 16px;
+#account button {
+    border: none;
+    background: none;
+    cursor: pointer;
 }
 
-.welcome {
-	font-size: 12px;
-	color: #666;
+#notification-button {
+    width: 25px;
+    height: 25px;
+    padding: 5px 0 0 50px;
 }
 
-.notification-btn {
-	border: none;
-	padding: 10px;
-	border-radius: 50%;
-	font-size: 16px;
-	cursor: pointer;
+#categories, #filters {
+    margin-top: 10px;
 }
 
-/* Status Buttons */
-.status-buttons {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 20px;
+#categories h6, #filters h6 {
+    padding: 30px 0 10px 20px;
+    font-size: 14px;
+    font-weight: lighter;
+    margin: 0;
 }
 
-.status-buttons button {
-	flex: 1;
-	margin: 0 5px;
-	padding: 5px;
-	background-color: #C9A0DC;
-	border: none;
-	border-radius: 20px;
-	font-weight: bold;
-	font-size: 12px;
-	cursor: pointer;
+.bullet {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: white;
+    margin-left: 15px;
 }
 
-/* Task Container */
-.task-container {
-	background-color: #ffffff;
-	padding: 15px;
-	border: 1px solid #ddd;
-	border-radius: 12px;
-	margin-bottom: 20px;
+#category, #filter {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    margin: auto;
+    color: white;
 }
 
-.urgent-btn {
-	background-color: #ff4d4f;
-	color: white;
-	padding: 5px 10px;
-	border: none;
-	border-radius: 5px;
-	font-size: 12px;
-	margin-bottom: 10px;
+#category:hover, #filter:hover {
+    background-color: #ad92eb;
 }
 
-.task-title {
-	font-size: 16px;
-	font-weight: bold;
-	margin-bottom: 5px;
+#category p, #filter p {
+    padding-left: 20px;
+    padding-top: 0;
+    font-size: 14px;
 }
 
-.task-desc {
-	font-size: 14px;
-	color: #666;
-	margin-bottom: 10px;
+.count {
+    margin-left: auto;
+    padding-right: 20px;
 }
 
-.task-action {
-	text-align: right;
+.settings-button {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
 }
 
-.task-action button {
-	background-color: #28a745;
-	color: white;
-	padding: 8px 12px;
-	border: none;
-	border-radius: 6px;
-	font-size: 14px;
-	cursor: pointer;
+.settings-button img {
+    width: 25px;
+    height: 25px;
+    padding: 105px 0 0 20px;
+    margin-top: auto;
 }
 
-/* Overview Section */
-.overview-container {
-	padding: 15px;
-	background-color: #ffffff;
-	border: 1px solid #ddd;
-	border-radius: 12px;
+#top-bar {
+    margin: 0 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.overview-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 10px;
+#top-barCalendar {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.overview-header h3 {
-	font-size: 16px;
+#searchbar {
+    display: flex;
+    width: 600px;
+    height: 50px;
+    margin: 20px 0 0 0;
+    background-color: #F9F5FF;
+    border: none;
+    border-radius: 25px;
 }
 
-.overview-header button {
-	font-size: 12px;
-	padding: 6px 10px;
-	background-color: #007bff;
-	color: white;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
+#search-input {
+    width: 450px;
+    height: 45px;
+    margin: 0 0 0 20px;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 14px;
 }
 
-.overview-grid {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 10px;
+.search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 60px;
 }
 
-.overview-box {
-	background-color: #f9f9f9;
-	padding: 12px;
-	border-radius: 8px;
-	text-align: center;
-	font-size: 14px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+#calendar-button {
+    background: none;
+    border: none;
+    cursor: pointer;
 }
+
+.calendar-button {
+    width: 30px;
+    height: 30px;
+    margin-top: 25px;
+    margin-left: 10px;
+}
+
+.Urgent-tasks {
+    margin: 50px 80px;
+}
+
+.Urgent-tasks h1 {
+    color: #FF6F62;
+    font-weight: bold;
+    font-size: 28px;
+    margin-left: 30px;
+}
+
+.task {
+    all: unset;
+    display: flex;
+    align-items: center;
+    width: 210%;
+    padding: 15px 0;
+    border-top: 1px solid #b7b7b7;
+    background-color: white;
+    cursor: pointer;
+}
+
+.task-details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.indicator {
+    width: 11px;
+    height: 25px;
+    background-color: #FF6F62;
+    border-radius: 15px;
+    margin-left: 30px;
+}
+
+#title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#description {
+    font-size: 14px;
+}
+
+.task-setting {
+    width: 20px;
+    height: 1px;
+    background-color: #767676;
+    margin-left: auto;
+    margin-right: 30px;
+}
+
+
+.RecentlyAdded-tasks {
+    margin: 150px 80px;
+}
+
+.RecentlyAdded-tasks h1 {
+    color: #515151;
+    font-weight: bold;
+    font-size: 28px;
+    margin-left: 30px;
+}
+
+
+
+
+
+
+
+
+
+
