@@ -48,7 +48,7 @@ class TaskController extends Controller
                 throw new \Exception('User not authenticated');
             }
 
-            $userId = Str::uuid();
+            $userId = Auth::id();
             $tasks = $request->input('tasks');
 
             foreach ($tasks as $task) {

@@ -272,6 +272,62 @@
         alert('Error saving tasks: ' + error.message);
     });
     });
+
+    window.addEventListener('DOMContentLoaded', () => {
+    fetch(base + '/tasks/fetch')
+        .then(res => res.json())
+        .then(data => {
+            (data.tasks || data).forEach(task => {
+                fetch(base + '/spawn/task')
+                    .then(res => res.text())
+                    .then(html => {
+                        const temp = document.createElement('div');
+                        temp.innerHTML = html.trim();
+                        const card = temp.firstElementChild;
+
+                        // Parse position from JSON string if necessary
+                        const position = typeof task.position === 'string' ? JSON.parse(task.position) : task.position;
+
+                        card.style.left = (position?.x || 0) + 'px';
+                        card.style.top = (position?.y || 0) + 'px';
+                        card.style.width = (position?.width || 220) + 'px';
+                        card.style.height = (position?.height || 130) + 'px';
+
+                        card.querySelector('.task-title').textContent = task.title;
+                        card.querySelector('.due-date-input').value = task.due_date || '';
+                        card.querySelector('.header').dataset.status = task.status;
+
+                        const taskList = card.querySelector('.task-list');
+                        taskList.innerHTML = '';
+
+                        let items = [];
+                        try {
+                            items = JSON.parse(task.content || '[]');
+                        } catch (e) {
+                            console.error('Invalid task items:', e);
+                        }
+
+                        items.forEach(item => {
+                            const li = document.createElement('li');
+                            li.className = 'task-list-item';
+                            li.innerHTML = `
+                                <span contenteditable="true" spellcheck="false">${item}</span>
+                                <span class="remove-task-item">—</span>
+                            `;
+                            li.querySelector('.remove-task-item').addEventListener('click', () => li.remove());
+                            taskList.appendChild(li);
+                        });
+
+                        makeDraggable(card);
+                        makeResizable(card);
+                        initializeTaskCard(card);
+                        document.getElementById('spawn-container').appendChild(card);
+                        spawnCount++;
+                    });
+            });
+        })
+        .catch(err => console.error('Failed to load tasks:', err));
+    });
     </script>
 </body>
 </html>

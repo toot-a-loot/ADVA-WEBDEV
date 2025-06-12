@@ -15,7 +15,7 @@
             <div id="account">
                 <img src="css/images/profile.png" alt="profile" id="profile">
                 <h1>Lorem Ipsum Name</h1>
-            
+
                 <button id="notification-btn" style="background:none;border:none;cursor:pointer;">
                     <img src="css/images/notification-button.png" alt="notification" id="notification-button">
                 </button>
@@ -89,27 +89,14 @@
                         class="calendar-button"></a>
             </div>
             <div class="Urgent-tasks">
-                <h1>Urgent</h1>
-                <button class="task">
-                    <div class="indicator"></div>
-                    <div class="task-details">
-                        <span id="title">Due Today!</span>
-                        <span id="description">Imong SRS!</span>
-                    </div>
-                    <div class="task-setting"></div>
-                </button>
-            </div>
-            <div class="RecentlyAdded-tasks">
-                <h1>Recently added</h1>
-                <button class="task">
-                    <div class="indicator"></div>
-                    <div class="task-details">
-                        <span id="title">Dogs!</span>
-                        <span id="description">buy dog food!</span>
-                    </div>
-                    <div class="task-setting"></div>
-                    </buttton>
-            </div>
+    <h1>Urgent</h1>
+    <div id="urgent-tasks-list"></div>
+</div>
+
+<div class="RecentlyAdded-tasks">
+    <h1>Recently added</h1>
+    <div id="recent-tasks-list"></div>
+</div>
         </div>
     </div>
     <script>
@@ -122,7 +109,64 @@ document.addEventListener('click', function() {
     var dropdown = document.getElementById('notification-dropdown');
     if(dropdown) dropdown.style.display = 'none';
 });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    fetch('/tasks/fetch')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                return;
+            }
+
+            const urgentList = document.getElementById('urgent-tasks-list');
+            const recentList = document.getElementById('recent-tasks-list');
+
+            // Clear current tasks
+            urgentList.innerHTML = '';
+            recentList.innerHTML = '';
+
+            const tasks = Array.isArray(data) ? data : data.tasks || [];
+
+            tasks.forEach(task => {
+                const dueDate = task.due_date ? new Date(task.due_date + 'T00:00:00') : null; // Ensure date parsing is consistent
+                const now = new Date();
+                // Normalize 'now' to match the start of the day for comparison
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+                let isUrgent = false;
+                if (dueDate) {
+                    const taskDueDateOnly = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
+                    isUrgent = (taskDueDateOnly.getTime() === today.getTime());
+                }
+
+                // If a task is urgent, it should only appear in urgent list.
+                // Otherwise, it can appear in the "Recently added" list.
+                // You might need more sophisticated logic here if "Recently added"
+                // has a specific time-based criteria (e.g., added in the last 7 days).
+                // For now, we'll put all non-urgent tasks in 'Recently added'.
+                const isRecent = !isUrgent; // All tasks that are not urgent
+
+                const taskEl = document.createElement('div');
+                taskEl.className = 'task';
+                taskEl.innerHTML = `
+                    <div class="indicator" style="background-color: ${isUrgent ? '#FF6F62' : '#B2A0DC'};"></div>
+                    <div class="task-details">
+                        <span id="title">${task.title}</span>
+                        <span id="description">${(JSON.parse(task.content || '[]')[0] || 'No description')}</span>
+                    </div>
+                    <div class="task-setting"></div>
+                `;
+
+                if (isUrgent) {
+                    urgentList.appendChild(taskEl);
+                } else { // All other tasks go to "Recently added"
+                    recentList.appendChild(taskEl);
+                }
+            });
+        })
+        .catch(err => console.error('Failed to load tasks:', err));
+        });
 </script>
 </body>
-
 </html>

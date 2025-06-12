@@ -72,3 +72,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tasks/save', [TaskController::class, 'save'])->name('tasks.save');
     Route::get('/tasks/user', [TaskController::class, 'getUserTasks'])->name('tasks.user');
 });
+
+//fetch tasks for dashboard
+Route::get('/tasks/fetch', [TaskController::class, 'getUserTasks']);
