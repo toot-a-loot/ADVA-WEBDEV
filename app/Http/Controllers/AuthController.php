@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -84,5 +85,45 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    /**
+     * Handle login request with Supabase
+     */
+    public function loginSupabase(Request $request)
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
+
+            // Sync with Supabase
+            $supabaseResponse = Http::withHeaders([
+                'apikey' => env('SUPABASE_KEY'),
+                'Content-Type' => 'application/json'
+            ])->post(env('SUPABASE_URL') . '/auth/v1/token', [
+                'email' => $request->email,
+                'password' => $request->password,
+                'grant_type' => 'password'
+            ]);
+
+            if (!$supabaseResponse->successful()) {
+                return back()->withErrors(['email' => 'Supabase authentication failed']);
+            }
+
+            $user = User::where('email', $request->email)->first();
+
+            if (!$user) {
+                return back()->withErrors(['email' => 'No user found with this email']);
+            }
+
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            return redirect()->intended('dashboard');
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
+        }
     }
 }
