@@ -39,7 +39,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed', // Use 'hashed' casting
     ];
 
     /**
@@ -49,9 +48,7 @@ class User extends Authenticatable
      */
     // public $timestamps = false;
 
-    /**
-     * Hash the password before saving.
-     */
+    // Add this mutator to ensure password is always hashed
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
