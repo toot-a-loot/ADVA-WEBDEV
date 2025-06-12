@@ -235,6 +235,7 @@
         tasks.push({
             title: card.querySelector('.task-title').textContent.trim(),
             status: card.querySelector('.header').dataset.status || 'ongoing',
+            dueDate: card.querySelector('.due-date-input').value || null,  // Add this line
             items: taskItems,
             position: {
                 left: card.style.left || '0px',

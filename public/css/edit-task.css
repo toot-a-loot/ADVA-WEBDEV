@@ -237,3 +237,15 @@ button{
 .remove-task-item:hover {
     color: #ff4444;
 }
+.due-date-container {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.due-date-input {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
