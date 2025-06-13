@@ -101,7 +101,7 @@
                         class="calendar-button"></a>
             </div>
             <div class="Urgent-tasks">
-                <h1>Urgent</h1>
+                <h1></h1>
                 <div id="urgent-tasks-list"></div>
             </div>
 
@@ -122,6 +122,17 @@
         <div class="modal-buttons">
             <button class="cancel-btn" onclick="closeLogoutModal()">Cancel</button>
             <button class="logout-confirm-btn" onclick="confirmLogout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Delete Task Modal -->
+    <div class="modal-overlay" id="deleteModalOverlay"></div>
+    <div class="modal" id="deleteTaskModal">
+        <h2>Delete Task</h2>
+        <p>Are you sure you want to delete this task?</p>
+        <div class="modal-buttons">
+            <button class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+            <button class="delete-btn" onclick="confirmDeleteTask()">Delete</button>
         </div>
     </div>
 
@@ -233,22 +244,244 @@
                 container.innerHTML = '<p>No tasks found.</p>';
                 return;
             }
-            let html = '<ul>';
-            data.forEach(task => {
-                html += `<li>
-                    <strong>${task.title}</strong> - ${task.status}
-                    <br>Due: ${task.due_date ? task.due_date : 'N/A'}
-                    <br>Content: ${task.content}
-                </li>`;
-            });
-            html += '</ul>';
-            container.innerHTML = html;
+            // let html = '<ul>';
+            // data.forEach(task => {
+            //     html += `<li>
+            //         <strong>${task.title}</strong> - ${task.status}
+            //         <br>Due: ${task.due_date ? task.due_date : 'N/A'}
+            //         <br>Content: ${task.content}
+            //     </li>`;
+            // });
+            // html += '</ul>';
+            // container.innerHTML = html;
         })
         .catch(err => {
             document.getElementById('tasks-container').innerHTML = '<p>Error loading tasks.</p>';
         });
 });
     </script>
+
+    <script>
+        // Logout Modal Functionality
+        const logoutModal = document.getElementById('logoutModal');
+        const logoutModalOverlay = document.getElementById('logoutModalOverlay');
+        const logoutButton = document.querySelector('.logout-button');
+
+        // Show modal when clicking logout button
+        logoutButton.addEventListener('click', function() {
+            logoutModal.style.display = 'block';
+            logoutModalOverlay.style.display = 'block';
+        });
+
+        // Close modal function
+        function closeLogoutModal() {
+            logoutModal.style.display = 'none';
+            logoutModalOverlay.style.display = 'none';
+        }
+
+        // Handle modal close when clicking outside
+        logoutModalOverlay.addEventListener('click', closeLogoutModal);
+
+        // Confirm logout function
+        function confirmLogout() {
+            // Create a form for the logout POST request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("logout") }}';
+
+            // Add CSRF token
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            form.appendChild(csrfToken);
+
+            // Add to document and submit
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && logoutModal.style.display === 'block') {
+                closeLogoutModal();
+            }
+        });
+    </script>
+
+    <script>
+        let taskToDelete = null;
+
+        function showDeleteModal(taskId, event) {
+            // Prevent the event from bubbling up
+            event.stopPropagation();
+
+            taskToDelete = taskId;
+            document.getElementById('deleteTaskModal').style.display = 'block';
+            document.getElementById('deleteModalOverlay').style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteTaskModal').style.display = 'none';
+            document.getElementById('deleteModalOverlay').style.display = 'none';
+            taskToDelete = null;
+        }
+
+        function confirmDeleteTask() {
+            if (!taskToDelete) return;
+
+            // Create form for DELETE request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/tasks/${taskToDelete}`;
+
+            // Add CSRF token
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            form.appendChild(csrfToken);
+
+            // Add method override for DELETE
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'DELETE';
+            form.appendChild(methodInput);
+
+            // Submit the form
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModalOverlay').addEventListener('click', closeDeleteModal);
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('deleteTaskModal').style.display === 'block') {
+                closeDeleteModal();
+            }
+        });
+    </script>
+
+    <style>
+        /* Logout Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .logout-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            text-align: center;
+        }
+
+        .logout-modal h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: #e0e0e0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .logout-confirm-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: #ff6b6b;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-confirm-btn:hover {
+            background: #ff5252;
+        }
+
+        /* Delete Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            text-align: center;
+        }
+
+        .delete-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        /* Make tasks clickable */
+        .task {
+            position: relative;
+        }
+
+        .task-delete-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .task:hover .task-delete-btn {
+            opacity: 1;
+        }
+    </style>
 </body>
 
 </html>

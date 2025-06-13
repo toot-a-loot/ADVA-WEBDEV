@@ -211,45 +211,25 @@ class TaskController extends Controller
      * Delete the specified task
      */
     public function destroy($id)
-    {
-        try {
-            // First verify the task belongs to the user
-            $response = Http::withHeaders([
-                'apikey' => $this->supabaseKey,
-                'Authorization' => 'Bearer ' . $this->supabaseKey
-            ])->get($this->supabaseUrl . '/rest/v1/tasks', [
-                'select' => 'user_id',
-                'id' => 'eq.' . $id
-            ]);
+{
+    try {
+        $response = Http::withHeaders([
+            'apikey' => $this->supabaseKey,
+            'Authorization' => 'Bearer ' . $this->supabaseKey
+        ])->delete($this->supabaseUrl . '/rest/v1/tasks', [
+            'id' => 'eq.' . $id,
+            'user_id' => 'eq.' . Auth::id() // Only delete if task belongs to user
+        ]);
 
-            if (!$response->successful()) {
-                throw new \Exception('Task not found');
-            }
-
-            $task = $response->json()[0] ?? null;
-            if (!$task || $task['user_id'] !== Auth::id()) {
-                return response()->json(['error' => 'Unauthorized'], 403);
-            }
-
-            // Delete the task
-            $response = Http::withHeaders([
-                'apikey' => $this->supabaseKey,
-                'Authorization' => 'Bearer ' . $this->supabaseKey
-            ])->delete($this->supabaseUrl . '/rest/v1/tasks?id=eq.' . $id);
-
-            if (!$response->successful()) {
-                throw new \Exception('Failed to delete task');
-            }
-
-            return response()->json(['message' => 'Task deleted successfully']);
-
-        } catch (\Exception $e) {
-            Log::error('Error in destroy', [
-                'error' => $e->getMessage(),
-                'task_id' => $id,
-                'user_id' => Auth::id()
-            ]);
-            return response()->json(['error' => 'Failed to delete task'], 500);
+        if (!$response->successful()) {
+            return redirect()->back()->with('error', 'Failed to delete task');
         }
+
+        return redirect()->back()->with('success', 'Task deleted successfully');
+    } catch (\Exception $e) {
+        Log::error('Error deleting task:', ['error' => $e->getMessage()]);
+        return redirect()->back()->with('error', 'Error deleting task');
     }
+}
+
 }
