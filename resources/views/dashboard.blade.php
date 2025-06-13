@@ -10,6 +10,18 @@
 </head>
 
 <body>
+    @if(Auth::check())
+        <script>console.log('User authenticated. ID:', '{{ Auth::id() }}');</script>
+    @else
+        <script>console.log('User not authenticated!');</script>
+    @endif
+
+    <!-- Debug information -->
+    <div id="debug-info" style="display: none;">
+        <p>Authentication Status: {{ Auth::check() ? 'Authenticated' : 'Not Authenticated' }}</p>
+        <p>User ID: {{ Auth::id() ?? 'No ID' }}</p>
+    </div>
+
     <div id="wrapper">
         <div id="side-panel" class="container">
             <div id="account">
@@ -97,6 +109,10 @@
                 <h1>Recently added</h1>
                 <div id="recent-tasks-list"></div>
             </div>
+
+            <div id="tasks-container">
+                <!-- Tasks will be rendered here -->
+            </div>
         </div>
     </div>
     <!-- Logout Modal -->
@@ -110,6 +126,14 @@
     </div>
 
     <script>
+        // Show debug panel with keyboard shortcut (Ctrl+Shift+D)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                const debugInfo = document.getElementById('debug-info');
+                debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+            }
+        });
+
         document.getElementById('notification-btn').onclick = function (e) {
             e.stopPropagation();
             var dropdown = document.getElementById('notification-dropdown');
@@ -121,107 +145,109 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('/tasks/fetch')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        console.error(data.error);
-                        return;
-                    }
-
-                    const urgentList = document.getElementById('urgent-tasks-list');
-                    const recentList = document.getElementById('recent-tasks-list');
-
-                    // Clear current tasks
-                    urgentList.innerHTML = '';
-                    recentList.innerHTML = '';
-
-                    const tasks = Array.isArray(data) ? data : data.tasks || [];
-
-                    tasks.forEach(task => {
-                        const dueDate = task.due_date ? new Date(task.due_date + 'T00:00:00') : null; // Ensure date parsing is consistent
-                        const now = new Date();
-                        // Normalize 'now' to match the start of the day for comparison
-                        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-                        let isUrgent = false;
-                        if (dueDate) {
-                            const taskDueDateOnly = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
-                            isUrgent = (taskDueDateOnly.getTime() === today.getTime());
-                        }
-
-                        // If a task is urgent, it should only appear in urgent list.
-                        // Otherwise, it can appear in the "Recently added" list.
-                        // You might need more sophisticated logic here if "Recently added"
-                        // has a specific time-based criteria (e.g., added in the last 7 days).
-                        // For now, we'll put all non-urgent tasks in 'Recently added'.
-                        const isRecent = !isUrgent; // All tasks that are not urgent
-
-                        const taskEl = document.createElement('div');
-                        taskEl.className = 'task';
-                        taskEl.innerHTML = `
-                    <div class="indicator" style="background-color: ${isUrgent ? '#FF6F62' : '#B2A0DC'};"></div>
-                    <div class="task-details">
-                        <span id="title">${task.title}</span>
-                        <span id="description">${(JSON.parse(task.content || '[]')[0] || 'No description')}</span>
-                    </div>
-                    <div class="task-setting"></div>
-                `;
-
-                        if (isUrgent) {
-                            urgentList.appendChild(taskEl);
-                        } else { // All other tasks go to "Recently added"
-                            recentList.appendChild(taskEl);
-                        }
+            fetch("{{ route('tasks.user') }}", {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Response not OK:', {
+                            status: response.status,
+                            statusText: response.statusText,
+                            text: text
+                        });
+                        throw new Error('Server error: ' + text);
                     });
-                })
-                .catch(err => console.error('Failed to load tasks:', err));
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const logoutButton = document.querySelector('.logout-button');
-            const modalOverlay = document.getElementById('logoutModalOverlay');
-            const logoutModal = document.getElementById('logoutModal');
-
-            function showLogoutModal() {
-                if (modalOverlay && logoutModal) {
-                    modalOverlay.style.display = 'block';
-                    logoutModal.style.display = 'block';
-                } else {
-                    console.error('Logout modal elements not found.');
                 }
-            }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Received data:', data);
 
-            function closeLogoutModal() {
-                if (modalOverlay && logoutModal) {
-                    modalOverlay.style.display = 'none';
-                    logoutModal.style.display = 'none';
-                }
-            }
+                const urgentList = document.getElementById('urgent-tasks-list');
+                const recentList = document.getElementById('recent-tasks-list');
 
-            window.closeLogoutModal = closeLogoutModal;
-            window.confirmLogout = function () {
-                window.location.href = "{{ url('/login') }}";
-            };
+                // Clear current tasks
+                urgentList.innerHTML = '';
+                recentList.innerHTML = '';
 
-            if (logoutButton) {
-                logoutButton.addEventListener('click', function (e) {
-                    e.preventDefault(); // Prevent form submission or default button behavior
-                    showLogoutModal();
-                });
-            } else {
-                console.error('Logout button not found.');
-            }
+                const tasks = Array.isArray(data) ? data : data.tasks || [];
 
-            if (modalOverlay) {
-                modalOverlay.addEventListener('click', function (e) {
-                    // Only close if the overlay itself is clicked, not the modal
-                    if (e.target === modalOverlay) {
-                        closeLogoutModal();
+                tasks.forEach(task => {
+                    const dueDate = task.due_date ? new Date(task.due_date + 'T00:00:00') : null; // Ensure date parsing is consistent
+                    const now = new Date();
+                    // Normalize 'now' to match the start of the day for comparison
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+                    let isUrgent = false;
+                    if (dueDate) {
+                        const taskDueDateOnly = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
+                        isUrgent = (taskDueDateOnly.getTime() === today.getTime());
+                    }
+
+                    // If a task is urgent, it should only appear in urgent list.
+                    // Otherwise, it can appear in the "Recently added" list.
+                    // You might need more sophisticated logic here if "Recently added"
+                    // has a specific time-based criteria (e.g., added in the last 7 days).
+                    // For now, we'll put all non-urgent tasks in 'Recently added'.
+                    const isRecent = !isUrgent; // All tasks that are not urgent
+
+                    const taskEl = document.createElement('div');
+                    taskEl.className = 'task';
+                    taskEl.innerHTML = `
+                <div class="indicator" style="background-color: ${isUrgent ? '#FF6F62' : '#B2A0DC'};"></div>
+                <div class="task-details">
+                    <span id="title">${task.title}</span>
+                    <span id="description">${(JSON.parse(task.content || '[]')[0] || 'No description')}</span>
+                </div>
+                <div class="task-setting"></div>
+            `;
+
+                    if (isUrgent) {
+                        urgentList.appendChild(taskEl);
+                    } else { // All other tasks go to "Recently added"
+                        recentList.appendChild(taskEl);
                     }
                 });
-            }
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                document.getElementById('tasks-container').innerHTML = '<p>Error: ' + err.message + '</p>';
+            });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    fetch('{{ url('/tasks/user') }}')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('tasks-container');
+            if (data.error) {
+                container.innerHTML = '<p>Error: ' + data.error + '</p>';
+                return;
+            }
+            if (data.length === 0) {
+                container.innerHTML = '<p>No tasks found.</p>';
+                return;
+            }
+            let html = '<ul>';
+            data.forEach(task => {
+                html += `<li>
+                    <strong>${task.title}</strong> - ${task.status}
+                    <br>Due: ${task.due_date ? task.due_date : 'N/A'}
+                    <br>Content: ${task.content}
+                </li>`;
+            });
+            html += '</ul>';
+            container.innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById('tasks-container').innerHTML = '<p>Error loading tasks.</p>';
+        });
+});
     </script>
 </body>
 

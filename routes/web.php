@@ -39,19 +39,23 @@ Route::get('/calendar', function () {
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// ...for update delete code testing...in TaskController.php
-Route::resource('tasks', TaskController::class);
-Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
-Route::put('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
-Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+// Task routes
+Route::middleware(['auth'])->group(function () {
+    // Get user's tasks
+    Route::get('/tasks/user', [TaskController::class, 'getUserTasks'])->name('tasks.user');
 
+    // Task management routes
+    Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+    Route::put('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
+    Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+    Route::post('/tasks/save', [TaskController::class, 'save'])->name('tasks.save');
+});
 
 Route::get('/board', function () {
     return view('board');
 });
 
 Route::get('/profile/edit', function () {
-    // Return a view or controller for editing the profile
     return view('profile-edit');
 })->name('profile.edit');
 
@@ -73,5 +77,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tasks/user', [TaskController::class, 'getUserTasks'])->name('tasks.user');
 });
 
-//fetch tasks for dashboard
-Route::get('/tasks/fetch', [TaskController::class, 'getUserTasks']);
+// All task-related routes should be in the auth middleware group

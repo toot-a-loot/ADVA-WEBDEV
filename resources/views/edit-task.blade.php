@@ -217,6 +217,7 @@
             document.addEventListener('mouseleave', stopResize);
         });
     }
+
     document.querySelector('.back-button').addEventListener('click', function() {
         window.location.href = base + '/dashboard';
     });
